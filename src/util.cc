@@ -51,7 +51,7 @@ namespace util {
 		// see man hostname(7), the size limit is 253
 		char hostnameBuf[256];
 		gethostname(hostnameBuf, sizeof(hostnameBuf));
-		string res = hostnameBuf + location;
+		string res = getUsername() + '_' + hostnameBuf + location;
 		replace(res.begin(), res.end(), '/', '_');
 		return res;
 	}

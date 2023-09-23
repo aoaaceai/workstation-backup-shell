@@ -47,10 +47,14 @@ namespace fs {
 	vector<DirectoryEntry> getFileList(std::string &location) {
 		vector<DirectoryEntry> list;
 		for (const DirectoryEntry& dirEntry : DirectoryIterator(location)) {
+			// Only include regular files.
+			if (!dirEntry.is_regular_file())
+				continue;
+
 			if (userOwns(dirEntry))
 				list.push_back(dirEntry);
 			else
-				cout << "skipping: " << dirEntry << endl;
+				cout << "skipping file owned by others: " << dirEntry << endl;
 		}
 		return list;
 	}
@@ -69,7 +73,7 @@ namespace fs {
 		return filename;
 	}
 
-	void zstdCompress(string &outputNameBase, string &rootDirectory, vector<DirectoryEntry> &targets) {
+	string zstdCompress(string &outputNameBase, string &rootDirectory, vector<DirectoryEntry> &targets) {
 		// tar --ignore-failed-read -caf xxx.tar.zst {*targets}
 
 		// declaring them as variables because we'll c_str() later
@@ -90,9 +94,11 @@ namespace fs {
 		int exitCode = util::fork_exec(argv);
 		if (exitCode != 0)
 			cout << "Warning: tar exited with non-zero status " << exitCode << endl;
+
+		return outputName;
 	}
 
-	void zipCompress(string &outputNameBase, string &rootDirectory, vector<DirectoryEntry> &targets) {
+	string zipCompress(string &outputNameBase, string &rootDirectory, vector<DirectoryEntry> &targets) {
 		// zip xxx.zip {*targets}
 		
 		// same as zstdCompress
@@ -112,5 +118,7 @@ namespace fs {
 		int exitCode = util::fork_exec(argv);
 		if (exitCode != 0)
 			cout << "Warning: zip exited with non-zero status " << exitCode << endl;
+		
+		return outputName;
 	}
 }

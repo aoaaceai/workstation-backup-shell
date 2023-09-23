@@ -17,6 +17,7 @@ namespace ui {
 	CompressMethod askCompressionMethod();
 	std::string askTmp2Directory();
 	bool warnParallelExecution();
+	void footer(std::string &outputName);
 }
 
 #endif

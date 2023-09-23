@@ -10,6 +10,7 @@ X11Forwarding no
 AllowTcpForwarding no
 PermitTTY no
 PermitTunnel no
+ChrootDirectory /tmp2/backup_output/
 
 Subsystem	sftp	/usr/lib/ssh/sftp-server
 ForceCommand internal-sftp

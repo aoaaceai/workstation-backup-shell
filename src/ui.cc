@@ -121,4 +121,8 @@ namespace ui {
 		}
 		return dirname;
 	}
+
+	void footer(string &outputName) {
+		cout << "Compression done. SFTP to port 2301 to collect your files." << endl;
+	}
 }

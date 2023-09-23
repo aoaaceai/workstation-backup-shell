@@ -9,32 +9,30 @@ using namespace std;
 
 // TODO: fix double inclusion
 namespace fsh {
-	static void compress(ui::CompressMethod method, string &location, string &outputName) {
+	static string compress(ui::CompressMethod method, string &location, string &outputName) {
 		string rootDirectory = location + "/../";
 		fs::chdir(rootDirectory);
 		string relativePath = fs::relativePath(location);
 		vector<fs::DirectoryEntry> entries = fs::getFileList(relativePath);
 		switch (method) {
 		case ui::ZSTD:
-			fs::zstdCompress(outputName, rootDirectory, entries);
-			break;
+			return fs::zstdCompress(outputName, rootDirectory, entries);
 		case ui::ZIP:
-			fs::zipCompress(outputName, rootDirectory, entries);
-			break;
+			return fs::zipCompress(outputName, rootDirectory, entries);
 		default:
 			throw customException::unknownError;
 		}
 	}
-	static void compressHomedir(ui::CompressMethod method) {
+	static string compressHomedir(ui::CompressMethod method) {
 		string location = util::getHomedir();
 		string outputName = util::homedirOutputName();
-		compress(method, location, outputName);
+		return compress(method, location, outputName);
 	}
 
-	static void compressTmp2(ui::CompressMethod method) {
+	static string compressTmp2(ui::CompressMethod method) {
 		string location = ui::askTmp2Directory();
 		string outputName = util::tmp2OutputName(location);
-		compress(method, location, outputName);
+		return compress(method, location, outputName);
 	}
 
 	static void run() {
@@ -42,16 +40,18 @@ namespace fsh {
 		ui::banner();
 		ui::BackupType backupType = ui::askBackupType();
 		ui::CompressMethod method = ui::askCompressionMethod();
+		string outputName;
 		switch (backupType) {
 		case ui::HOMEDIR:
-			compressHomedir(method);
+			outputName = compressHomedir(method);
 			break;
 		case ui::TMP2:
-			compressTmp2(method);
+			outputName = compressTmp2(method);
 			break;
 		default:
 			throw customException::unknownError;
 		}
+		ui::footer(outputName);
 	}
 
 	static bool acquireRuntimeLock() {
