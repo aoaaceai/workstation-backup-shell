@@ -16,7 +16,7 @@ SYSTEMD_SERVICE_DIR=/usr/lib/systemd/system/
 
 RUNTIME_DIRS=$(addprefix /tmp2/,backup_list backup_locks backup_output)
 
-READONLY_DIRS=/tmp2_rootonly/
+READONLY_DIRS=/tmp2_rootonly/ /tmp2/backup_rootonly
 
 all: $(FSH_OBJS) $(PRIVLINK_OBJS)
 	g++ $(FSH_OBJS) -o build/fsh
@@ -34,9 +34,13 @@ install:
 	mkdir -p $(RUNTIME_DIRS) $(READONLY_DIRS)
 	chmod 1777 $(RUNTIME_DIRS)
 	chmod 755 $(READONLY_DIRS)
+	mount -o bind /tmp2/backup_rootonly /tmp2_rootonly/
 
 uninstall:
 	rm /bin/fsh
 	rm /bin/privlink
 	rm $(addprefix $(SSH_CONFIG_DIR), $(notdir ${SSHD_CONFIGS}))
 	rm $(addprefix $(SYSTEMD_SERVICE_DIR), $(notdir $(SYSTEMD_SERVICES)))
+	umount /tmp2_rootonly/
+	rm -rf $(RUNTIME_DIRS)
+	rm -rf $(READONLY_DIRS)

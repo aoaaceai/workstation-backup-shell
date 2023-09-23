@@ -47,7 +47,7 @@ namespace util {
 	}
 
 	string outputReadonlyDir() {
-		return "/tmp2_rootonly/";
+		return "/tmp2/backup_rootonly/";
 	}
 
 	string outputReadonlyName(const string &&filename) {
