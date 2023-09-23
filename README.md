@@ -33,9 +33,9 @@ Compresses the home directory or /tmp2/ directory of a user. Then, store it some
 
 ### Privlink -- Privieleged Linker
 
-Links the compressed file to a read-only directory in /tmp2/.
+Executed at the end of FSH. Links the compressed file to a read-only directory in /tmp2/.
 
-This program is to bypass the SFTP chroot limitations. For security reasons, the path it chroots to cannot be writable by non-root users. However, since the only disk space we can use is /tmp2/, we have to somehow trick SSHD into opening a user-writable directory.
+The sole purpose of this program is to bypass the [SFTP chroot restrictions](https://man.openbsd.org/sshd_config#ChrootDirectory). For security reasons, the path it chroots to cannot be writable by non-root users. However, since the only disk space we can use is /tmp2/, we have to somehow trick SSHD into opening a user-writable directory.
 
 The solution is (not) quite straightforward.
 First, we create a directory (the Storage from now on) with permission 1777 in /tmp2/ to store the compressed files.
