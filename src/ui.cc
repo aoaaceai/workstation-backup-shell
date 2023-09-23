@@ -1,7 +1,8 @@
-#include "ui.h"
 #include <iostream>
 #include <memory>
+#include "ui.h"
 #include "customException.h"
+#include "util.h"
 using namespace std;
 
 namespace ui {
@@ -23,7 +24,7 @@ namespace ui {
 			cin >> choice;
 
 			if (cin.eof())
-				throw customException::EofError();
+				throw customException::eofError;
 
 			if (choice == 1 || choice == 2)
 				break;
@@ -34,20 +35,13 @@ namespace ui {
 		return (BackupChoice) choice;
 	}
 
-	static string resolvePath(string &path) {
-		char *raw = realpath(path.c_str(), nullptr);
-		string res = raw ?: "";
-		free(raw);
-		return res;
-	}
-
 	static string readNonemptyLine() {
 		string input;
 		while (getline(cin, input)) {
 			if (input.size())
 				return input;
 		}
-		throw customException::EofError();
+		throw customException::eofError;
 	}
 
 	static void listTmp2() {
@@ -67,7 +61,7 @@ namespace ui {
 			if (input == "ls")
 				listTmp2();
 			else {
-				dirname = resolvePath(input);
+				dirname = util::resolvePath(input);
 				if (!dirname.compare(0, 6, "/tmp2/"))
 					break;
 				cout << "Enter a valid path under /tmp2" << endl;
