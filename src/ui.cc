@@ -5,12 +5,13 @@
 #include "util.h"
 using namespace std;
 
+// TODO: code reuse
 namespace ui {
 	void banner() {
 		cout << "Workstation backup service" << endl;
 	}
 
-	BackupChoice askBackupChoice() {
+	BackupType askBackupType() {
 		int choice;
 
 		while (true) {
@@ -32,7 +33,31 @@ namespace ui {
 			cout << "Please input a number." << endl;
 		}
 
-		return (BackupChoice) choice;
+		return (BackupType) choice;
+	}
+
+	CompressMethod askCompressionMethod() {
+		int choice;
+
+		while (true) {
+			cout
+				<< "Choose the compression method:" << endl
+				<< "1. Zstd" << endl
+				<< "2. ZIP" << endl
+				<< "> ";
+
+			choice = -1;
+			cin >> choice;
+
+			if (cin.eof())
+				throw customException::eofError;
+
+			if (choice == 1 || choice == 2)
+				break;
+
+			cout << "Please input a number." << endl;
+		}
+		return (CompressMethod) choice;
 	}
 
 	static string readNonemptyLine() {

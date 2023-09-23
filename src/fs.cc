@@ -9,6 +9,7 @@
 
 using namespace std;
 
+// TODO: code reuse
 namespace fs {
 	using DirectoryIterator = std::filesystem::recursive_directory_iterator;
 
@@ -30,14 +31,7 @@ namespace fs {
 	vector<DirectoryEntry> getFileList(std::string &location) {
 		vector<DirectoryEntry> list;
 		for (const DirectoryEntry& dirEntry : DirectoryIterator(location)) {
-			if (
-				(
-					dirEntry.is_directory() ||
-					dirEntry.is_symlink() ||
-					dirEntry.is_regular_file()
-				) &&
-				userOwns(dirEntry)
-			)
+			if (userOwns(dirEntry))
 				list.push_back(dirEntry);
 			else
 				cout << "skipping: " << dirEntry << endl;
@@ -59,12 +53,16 @@ namespace fs {
 		return filename;
 	}
 
-	void compress(string &outputNameBase, string &rootDirectory, vector<DirectoryEntry> &targets) {
+	static string genOutputName(string &base, const string &&suffix) {
+		return "/tmp2/backup_output/" + base + suffix;
+	}
+
+	void zstdCompress(string &outputNameBase, string &rootDirectory, vector<DirectoryEntry> &targets) {
 		// tar --ignore-failed-read -caf xxx.tar.zst {*targets}
 
 		// declaring them as variables because we'll c_str() later
 		string filesFrom = writeFileList(outputNameBase, targets);
-		string outputName = "/tmp2/backup_output/" + outputNameBase + ".tar.zst";
+		string outputName = genOutputName(outputNameBase, ".tar.zst");
 
 		// safe to const_cast because we are not touching these pointers
 		vector<char *> argv {
@@ -80,5 +78,27 @@ namespace fs {
 		int exitCode = util::fork_exec(argv);
 		if (exitCode != 0)
 			cout << "Warning: tar exited with non-zero status " << exitCode << endl;
+	}
+
+	void zipCompress(string &outputNameBase, string &rootDirectory, vector<DirectoryEntry> &targets) {
+		// zip xxx.zip {*targets}
+		
+		// same as zstdCompress
+		string filesFrom = writeFileList(outputNameBase, targets);
+		string outputName = genOutputName(outputNameBase, ".zip");
+		string filesFromOption = "-i@" + filesFrom;
+
+		vector<char *> argv {
+			const_cast<char *>("zip"),
+			const_cast<char *>("-r"),
+			const_cast<char *>((outputName).c_str()),
+			const_cast<char *>("."),
+			const_cast<char *>(filesFromOption.c_str()),
+			nullptr
+		};
+
+		int exitCode = util::fork_exec(argv);
+		if (exitCode != 0)
+			cout << "Warning: zip exited with non-zero status " << exitCode << endl;
 	}
 }

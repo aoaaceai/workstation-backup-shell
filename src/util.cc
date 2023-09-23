@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <string>
+#include <algorithm>
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
@@ -33,9 +34,10 @@ namespace util {
 	string tmp2OutputName(string &location) {
 		// see man hostname(7), the size limit is 253
 		char hostnameBuf[256];
-		string username = getpwuid(getuid())->pw_name;
 		gethostname(hostnameBuf, sizeof(hostnameBuf));
-		return username + '_' + hostnameBuf + '_' + location;
+		string res = hostnameBuf + location;
+		replace(res.begin(), res.end(), '/', '_');
+		return res;
 	}
 
 	// returns the exit code of the child process

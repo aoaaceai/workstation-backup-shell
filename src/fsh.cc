@@ -10,36 +10,49 @@ using namespace std;
 namespace fsh {
 	// TODO: ban parallel login
 
-	static void compress(string &location, string &outputName) {
+	static void compress(ui::CompressMethod method, string &location, string &outputName) {
 		string rootDirectory = location + "/../";
 		fs::chdir(rootDirectory);
 		string relativePath = fs::relativePath(location);
 		vector<fs::DirectoryEntry> entries = fs::getFileList(relativePath);
-		fs::compress(outputName, rootDirectory, entries);
+		switch (method) {
+		case ui::ZSTD:
+			fs::zstdCompress(outputName, rootDirectory, entries);
+			break;
+		case ui::ZIP:
+			fs::zipCompress(outputName, rootDirectory, entries);
+			break;
+		default:
+			throw customException::unknownError;
+		}
 	}
-	static void compressHomedir() {
+	static void compressHomedir(ui::CompressMethod method) {
 		string location = util::getHomedir();
 		string outputName = util::homedirOutputName();
-		compress(location, outputName);
+		compress(method, location, outputName);
 	}
 
-	static void compressTmp2() {
+	static void compressTmp2(ui::CompressMethod method) {
 		string location = ui::askTmp2Directory();
 		string outputName = util::tmp2OutputName(location);
-		compress(location, outputName);
+		compress(method, location, outputName);
 	}
 
 	static void run() {
 		util::setUmask();
 		ui::banner();
-		ui::BackupChoice choice = ui::askBackupChoice();
-		switch (choice) {
+		// TODO: change this name
+		ui::BackupType backupType = ui::askBackupType();
+		ui::CompressMethod method = ui::askCompressionMethod();
+		switch (backupType) {
 		case ui::HOMEDIR:
-			compressHomedir();
+			compressHomedir(method);
 			break;
 		case ui::TMP2:
-			compressTmp2();
+			compressTmp2(method);
 			break;
+		default:
+			throw customException::unknownError;
 		}
 	}
 

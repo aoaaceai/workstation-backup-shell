@@ -34,11 +34,18 @@ namespace customException {
 		}
 	};
 
+	class UnknownError : public std::exception {
+		virtual const char *what() const noexcept {
+			return "Unknown error";
+		}
+	};
+
 	extern EofError eofError;
 	extern OpenError openError;
 	extern ForkError forkError;
 	extern WaitError waitError;
 	extern ExecError execError;
+	extern UnknownError unknownError;
 }
 
 #endif

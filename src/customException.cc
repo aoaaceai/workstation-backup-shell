@@ -6,4 +6,5 @@ namespace customException {
 	ForkError forkError;
 	WaitError waitError;
 	ExecError execError;
+	UnknownError unknownError;
 }

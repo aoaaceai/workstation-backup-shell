@@ -4,12 +4,17 @@
 #include <string>
 
 namespace ui {
-	enum BackupChoice {
+	enum BackupType {
 		HOMEDIR = 1, TMP2 = 2
 	};
 
+	enum CompressMethod {
+		ZSTD = 1, ZIP = 2
+	};
+
 	void banner();
-	BackupChoice askBackupChoice();
+	BackupType askBackupType();
+	CompressMethod askCompressionMethod();
 	std::string askTmp2Directory();
 }
 
