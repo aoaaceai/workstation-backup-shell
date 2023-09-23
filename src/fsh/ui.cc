@@ -1,8 +1,8 @@
 #include <iostream>
 #include <memory>
 #include "ui.h"
-#include "errors.h"
-#include "util.h"
+#include "../common/errors.h"
+#include "../common/util.h"
 using namespace std;
 
 // TODO: code reuse

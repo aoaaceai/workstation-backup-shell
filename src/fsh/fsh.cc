@@ -1,13 +1,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <exception>
 #include "ui.h"
-#include "errors.h"
-#include "util.h"
+#include "../common/errors.h"
+#include "../common/util.h"
 #include "fs.h"
 using namespace std;
 
-// TODO: fix double inclusion
 namespace fsh {
 	static string compress(ui::CompressMethod method, string &location, string &outputName) {
 		string rootDirectory = location + "/../";
@@ -72,7 +72,7 @@ namespace fsh {
 			run();
 			releaseRuntimeLock();
 		}
-		catch (std::exception &e) {
+		catch (exception &e) {
 			cout << "Exception caught: " << e.what() << endl;
 		}
 	}

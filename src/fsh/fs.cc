@@ -5,12 +5,13 @@
 #include <fstream>
 #include <cstdio>
 #include "fs.h"
-#include "errors.h"
-#include "util.h"
+#include "../common/errors.h"
+#include "../common/util.h"
 
 using namespace std;
 
 // TODO: code reuse
+// TODO: fix lock freeing
 namespace fs {
 	using DirectoryIterator = std::filesystem::recursive_directory_iterator;
 
@@ -37,12 +38,6 @@ namespace fs {
 		return filesystem::relative(path).c_str();
 	}
 
-	static bool userOwns(DirectoryEntry entry) {
-		struct stat info;
-		if (stat(entry.path().c_str(), &info) < 0)
-			return false;
-		return info.st_uid == getuid();
-	}
 
 	vector<DirectoryEntry> getFileList(std::string &location) {
 		vector<DirectoryEntry> list;
@@ -51,7 +46,7 @@ namespace fs {
 			if (!dirEntry.is_regular_file())
 				continue;
 
-			if (userOwns(dirEntry))
+			if (util::userOwns(dirEntry.path().c_str()))
 				list.push_back(dirEntry);
 			else
 				cout << "skipping file owned by others: " << dirEntry << endl;

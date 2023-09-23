@@ -38,8 +38,20 @@ namespace util {
 		return "/tmp2/backup_list/" + baseName + ".list";
 	}
 
+	string outputArchiveDir() {
+		return "/tmp2/backup_output/";
+	}
+
 	string outputArchiveName(string &base, const string &&suffix) {
-		return "/tmp2/backup_output/" + base + suffix;
+		return outputArchiveDir() + base + suffix;
+	}
+
+	string outputReadonlyDir() {
+		return "/tmp2_rootonly/";
+	}
+
+	string outputReadonlyName(const string &&filename) {
+		return outputReadonlyDir() + filename;
 	}
 
 	string homedirOutputName() {
@@ -72,5 +84,12 @@ namespace util {
 		}
 		waitpid(pid, &status, 0);
 		return WEXITSTATUS(status);
+	}
+
+	bool userOwns(const char *path) {
+		struct stat info;
+		if (stat(path, &info) < 0)
+			return false;
+		return info.st_uid == getuid();
 	}
 }

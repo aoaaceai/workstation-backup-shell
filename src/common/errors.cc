@@ -7,4 +7,5 @@ namespace errors {
 	WaitError waitError;
 	ExecError execError;
 	UnknownError unknownError;
+	ArgumentError argumentError;
 }

@@ -40,12 +40,19 @@ namespace errors {
 		}
 	};
 
+	class ArgumentError: public std::exception {
+		virtual const char *what() const noexcept {
+			return "Argument error";
+		}
+	};
+
 	extern EofError eofError;
 	extern OpenError openError;
 	extern ForkError forkError;
 	extern WaitError waitError;
 	extern ExecError execError;
 	extern UnknownError unknownError;
+	extern ArgumentError argumentError;
 }
 
 #endif
