@@ -11,6 +11,33 @@ namespace ui {
 		cout << "Workstation backup service" << endl;
 	}
 
+	bool warnParallelExecution() {
+		int choice;
+
+		while (true) {
+			cout
+				<< "Warning: You might have other sessions on this machine." << endl
+				<< "This may affect the integrity of the compressed files." << endl
+				<< "Do you want to continue?" << endl
+				<< "1. Yes" << endl
+				<< "2. No" << endl
+				<< "> ";
+
+			choice = -1;
+			cin >> choice;
+
+			if (cin.eof())
+				throw customException::eofError;
+
+			if (choice == 1 || choice == 2)
+				break;
+
+			cout << "Please input a number." << endl;
+		}
+
+		return choice == 1;
+	}
+
 	BackupType askBackupType() {
 		int choice;
 

@@ -26,9 +26,17 @@ namespace util {
 		return res;
 	}
 
+	static string getUsername() {
+		return getpwuid(getuid())->pw_name;
+	}
+
+	string runtimeLockName() {
+		return "/tmp2/backup_locks/" + getUsername() + ".lock";
+	}
+
 	string homedirOutputName() {
 		string username = getpwuid(getuid())->pw_name;
-		return username + "_homedir";
+		return getUsername() + "_homedir";
 	}
 
 	string tmp2OutputName(string &location) {

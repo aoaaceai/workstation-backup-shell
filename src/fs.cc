@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fstream>
+#include <cstdio>
 #include "fs.h"
 #include "customException.h"
 #include "util.h"
@@ -12,6 +13,21 @@ using namespace std;
 // TODO: code reuse
 namespace fs {
 	using DirectoryIterator = std::filesystem::recursive_directory_iterator;
+
+	bool createExclusive(const string &path) {
+		// TODO: update this when C++23 is more popular
+		FILE *fp = fopen(path.c_str(), "wx");
+		if (fp) {
+			fclose(fp);
+			return true;
+		}
+		else
+			return false;
+	}
+
+	void removeFile(const std::string &path) {
+		filesystem::remove(path);
+	}
 
 	void chdir(string &path) {
 		filesystem::current_path(path);

@@ -16,6 +16,7 @@ namespace ui {
 	BackupType askBackupType();
 	CompressMethod askCompressionMethod();
 	std::string askTmp2Directory();
+	bool warnParallelExecution();
 }
 
 #endif

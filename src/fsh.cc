@@ -8,8 +8,6 @@
 using namespace std;
 
 namespace fsh {
-	// TODO: ban parallel login
-
 	static void compress(ui::CompressMethod method, string &location, string &outputName) {
 		string rootDirectory = location + "/../";
 		fs::chdir(rootDirectory);
@@ -41,7 +39,6 @@ namespace fsh {
 	static void run() {
 		util::setUmask();
 		ui::banner();
-		// TODO: change this name
 		ui::BackupType backupType = ui::askBackupType();
 		ui::CompressMethod method = ui::askCompressionMethod();
 		switch (backupType) {
@@ -56,9 +53,23 @@ namespace fsh {
 		}
 	}
 
+	static bool acquireRuntimeLock() {
+		bool res = fs::createExclusive(util::runtimeLockName());
+		if (res)
+			return true;
+		return ui::warnParallelExecution();
+	}
+
+	static void releaseRuntimeLock() {
+		fs::removeFile(util::runtimeLockName());
+	}
+
 	void start() {
 		try {
+			if (!acquireRuntimeLock())
+				return;
 			run();
+			releaseRuntimeLock();
 		}
 		catch (std::exception &e) {
 			cout << "Exception caught: " << e.what() << endl;
