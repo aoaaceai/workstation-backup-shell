@@ -7,7 +7,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include "util.h"
-#include "customException.h"
+#include "errors.h"
 
 using namespace std;
 namespace util {
@@ -62,13 +62,13 @@ namespace util {
 		pid_t pid = fork();
 
 		if (pid < 0)
-			throw customException::forkError;
+			throw errors::forkError;
 		if (pid == 0) {
 			// vectors are (by standard) implemented with contiguous arrays
 			// so it's safe to pass the raw pointer
 			// see https://en.cppreference.com/w/cpp/container/vector
 			int res = execvp(argv[0], &argv[0]);
-			throw customException::execError;
+			throw errors::execError;
 		}
 		waitpid(pid, &status, 0);
 		return WEXITSTATUS(status);

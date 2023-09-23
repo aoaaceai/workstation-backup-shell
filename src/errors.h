@@ -1,8 +1,8 @@
-#ifndef _customException_h
-#define _customException_h
+#ifndef _errors_h
+#define _errors_h
 
 #include <exception>
-namespace customException {
+namespace errors {
 	class EofError : public std::exception {
 	public:
 		virtual const char *what() const noexcept {

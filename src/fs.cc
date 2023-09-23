@@ -5,7 +5,7 @@
 #include <fstream>
 #include <cstdio>
 #include "fs.h"
-#include "customException.h"
+#include "errors.h"
 #include "util.h"
 
 using namespace std;
@@ -65,7 +65,7 @@ namespace fs {
 
 		filesFrom.open(filename, ofstream::out | ofstream::trunc);
 		if (filesFrom.fail())
-			throw customException::openError;
+			throw errors::openError;
 
 		for (DirectoryEntry &target : targets)
 			filesFrom << target.path().c_str() << endl;

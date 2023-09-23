@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 #include "ui.h"
-#include "customException.h"
+#include "errors.h"
 #include "util.h"
 using namespace std;
 
@@ -27,7 +27,7 @@ namespace ui {
 			cin >> choice;
 
 			if (cin.eof())
-				throw customException::eofError;
+				throw errors::eofError;
 
 			if (choice == 1 || choice == 2)
 				break;
@@ -52,7 +52,7 @@ namespace ui {
 			cin >> choice;
 
 			if (cin.eof())
-				throw customException::eofError;
+				throw errors::eofError;
 
 			if (choice == 1 || choice == 2)
 				break;
@@ -77,7 +77,7 @@ namespace ui {
 			cin >> choice;
 
 			if (cin.eof())
-				throw customException::eofError;
+				throw errors::eofError;
 
 			if (choice == 1 || choice == 2)
 				break;
@@ -93,7 +93,7 @@ namespace ui {
 			if (input.size())
 				return input;
 		}
-		throw customException::eofError;
+		throw errors::eofError;
 	}
 
 	static void listTmp2() {

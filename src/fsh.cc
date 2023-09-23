@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include "ui.h"
-#include "customException.h"
+#include "errors.h"
 #include "util.h"
 #include "fs.h"
 using namespace std;
@@ -20,7 +20,7 @@ namespace fsh {
 		case ui::ZIP:
 			return fs::zipCompress(outputName, rootDirectory, entries);
 		default:
-			throw customException::unknownError;
+			throw errors::unknownError;
 		}
 	}
 	static string compressHomedir(ui::CompressMethod method) {
@@ -49,7 +49,7 @@ namespace fsh {
 			outputName = compressTmp2(method);
 			break;
 		default:
-			throw customException::unknownError;
+			throw errors::unknownError;
 		}
 		ui::footer(outputName);
 	}

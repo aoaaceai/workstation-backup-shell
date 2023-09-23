@@ -1,6 +1,6 @@
-#include "customException.h"
+#include "errors.h"
 
-namespace customException {
+namespace errors {
 	EofError eofError;
 	OpenError openError;
 	ForkError forkError;
