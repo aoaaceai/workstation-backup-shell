@@ -12,5 +12,10 @@ This shell is used for compressing the data in the workstations.
 - Ask for the compression method (zip, zstd)
 - Compress the file
 	- Only include files owned by the user!
-- Upload to some sort of server
 - Let them download
+
+## Installation
+
+This project is Arch-only for now.
+To install the program, run `make` and `make install`.
+If you changed your mind, run `make uninstall`.

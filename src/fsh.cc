@@ -7,6 +7,7 @@
 #include "fs.h"
 using namespace std;
 
+// TODO: fix double inclusion
 namespace fsh {
 	static void compress(ui::CompressMethod method, string &location, string &outputName) {
 		string rootDirectory = location + "/../";

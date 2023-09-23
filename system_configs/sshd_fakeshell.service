@@ -1,0 +1,14 @@
+[Unit]
+Description=SSH Daemon for the fake shell
+Wants=sshdgenkeys.service
+After=sshdgenkeys.service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/sshd -D -f /etc/ssh/sshd_config_fakeshell
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
