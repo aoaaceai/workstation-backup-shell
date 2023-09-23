@@ -68,6 +68,18 @@ namespace fs {
 		return filename;
 	}
 
+	static void runPrivlink(string &outputName) {
+		vector<char *> argv {
+			const_cast<char *>("privlink"),
+			const_cast<char *>(outputName.c_str()),
+			nullptr
+		};
+
+		int exitCode = util::fork_exec(argv);
+		if (exitCode != 0)
+			throw errors::unknownError;
+	}
+
 	string zstdCompress(string &outputNameBase, string &rootDirectory, vector<DirectoryEntry> &targets) {
 		// tar --ignore-failed-read -caf xxx.tar.zst {*targets}
 
@@ -90,6 +102,7 @@ namespace fs {
 		if (exitCode != 0)
 			cout << "Warning: tar exited with non-zero status " << exitCode << endl;
 
+		runPrivlink(outputName);
 		return outputName;
 	}
 
@@ -114,6 +127,7 @@ namespace fs {
 		if (exitCode != 0)
 			cout << "Warning: zip exited with non-zero status " << exitCode << endl;
 		
+		runPrivlink(outputName);
 		return outputName;
 	}
 }

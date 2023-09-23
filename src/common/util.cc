@@ -70,7 +70,9 @@ namespace util {
 
 	// returns the exit code of the child process
 	int fork_exec(vector<char *> &argv) {
-		int status;
+		if (argv.size() == 0 || argv.back() != nullptr)
+			throw errors::argumentError;
+
 		pid_t pid = fork();
 
 		if (pid < 0)
@@ -82,7 +84,10 @@ namespace util {
 			int res = execvp(argv[0], &argv[0]);
 			throw errors::execError;
 		}
+
+		int status;
 		waitpid(pid, &status, 0);
+
 		return WEXITSTATUS(status);
 	}
 
