@@ -34,6 +34,14 @@ namespace util {
 		return "/tmp2/backup_locks/" + getUsername() + ".lock";
 	}
 
+	string fileListName(string &baseName) {
+		return "/tmp2/backup_list/" + baseName + ".list";
+	}
+
+	string outputArchiveName(string &base, const string &&suffix) {
+		return "/tmp2/backup_output/" + base + suffix;
+	}
+
 	string homedirOutputName() {
 		string username = getpwuid(getuid())->pw_name;
 		return getUsername() + "_homedir";

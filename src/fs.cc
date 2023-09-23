@@ -56,7 +56,7 @@ namespace fs {
 	}
 
 	static string writeFileList(string &baseName, vector<DirectoryEntry> &targets) {
-		string filename = "/tmp2/backup_list/" + baseName + ".list";
+		string filename = util::fileListName(baseName);
 		ofstream filesFrom;
 
 		filesFrom.open(filename, ofstream::out | ofstream::trunc);
@@ -69,16 +69,12 @@ namespace fs {
 		return filename;
 	}
 
-	static string genOutputName(string &base, const string &&suffix) {
-		return "/tmp2/backup_output/" + base + suffix;
-	}
-
 	void zstdCompress(string &outputNameBase, string &rootDirectory, vector<DirectoryEntry> &targets) {
 		// tar --ignore-failed-read -caf xxx.tar.zst {*targets}
 
 		// declaring them as variables because we'll c_str() later
 		string filesFrom = writeFileList(outputNameBase, targets);
-		string outputName = genOutputName(outputNameBase, ".tar.zst");
+		string outputName = util::outputArchiveName(outputNameBase, ".tar.zst");
 
 		// safe to const_cast because we are not touching these pointers
 		vector<char *> argv {
@@ -101,7 +97,7 @@ namespace fs {
 		
 		// same as zstdCompress
 		string filesFrom = writeFileList(outputNameBase, targets);
-		string outputName = genOutputName(outputNameBase, ".zip");
+		string outputName = util::outputArchiveName(outputNameBase, ".zip");
 		string filesFromOption = "-i@" + filesFrom;
 
 		vector<char *> argv {
