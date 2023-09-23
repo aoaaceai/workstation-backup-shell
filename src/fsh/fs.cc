@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <fstream>
 #include <cstdio>
+#include <sys/file.h>
+#include <fcntl.h>
 #include "fs.h"
 #include "../common/errors.h"
 #include "../common/util.h"
@@ -11,19 +13,14 @@
 using namespace std;
 
 // TODO: code reuse
-// TODO: fix lock freeing
 namespace fs {
 	using DirectoryIterator = std::filesystem::recursive_directory_iterator;
 
 	bool createExclusive(const string &path) {
-		// TODO: update this when C++23 is more popular
-		FILE *fp = fopen(path.c_str(), "wx");
-		if (fp) {
-			fclose(fp);
-			return true;
-		}
-		else
-			return false;
+		int fd = open(path.c_str(), O_RDONLY | O_CREAT);
+		if (fd < 0)
+			throw errors::openError;
+		return flock(fd, LOCK_EX | LOCK_NB) == 0;
 	}
 
 	void removeFile(const std::string &path) {

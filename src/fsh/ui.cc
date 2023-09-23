@@ -7,35 +7,28 @@ using namespace std;
 
 // TODO: code reuse
 namespace ui {
+	static int getNum() {
+		int choice;
+		choice = -1;
+		cin >> choice;
+
+		if (cin.eof())
+			throw errors::eofError;
+
+		if (cin.fail())
+			cin.clear();
+
+		return choice;
+	}
+
 	void banner() {
 		cout << "Workstation backup service" << endl;
 	}
 
-	bool warnParallelExecution() {
-		int choice;
-
-		while (true) {
-			cout
-				<< "Warning: You might have other sessions on this machine." << endl
-				<< "This may affect the integrity of the compressed files." << endl
-				<< "Do you want to continue?" << endl
-				<< "1. Yes" << endl
-				<< "2. No" << endl
-				<< "> ";
-
-			choice = -1;
-			cin >> choice;
-
-			if (cin.eof())
-				throw errors::eofError;
-
-			if (choice == 1 || choice == 2)
-				break;
-
-			cout << "Please input a number." << endl;
-		}
-
-		return choice == 1;
+	void warnParallelExecution() {
+		cout
+			<< "Warning: You have other sessions on this machine." << endl
+			<< "Make sure you have terminated all connections to this machine" << endl;
 	}
 
 	BackupType askBackupType() {
@@ -48,11 +41,7 @@ namespace ui {
 				<< "2. /tmp2" << endl
 				<< "> ";
 
-			choice = -1;
-			cin >> choice;
-
-			if (cin.eof())
-				throw errors::eofError;
+			choice = getNum();
 
 			if (choice == 1 || choice == 2)
 				break;
@@ -73,11 +62,7 @@ namespace ui {
 				<< "2. ZIP" << endl
 				<< "> ";
 
-			choice = -1;
-			cin >> choice;
-
-			if (cin.eof())
-				throw errors::eofError;
+			choice = getNum();
 
 			if (choice == 1 || choice == 2)
 				break;

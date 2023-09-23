@@ -56,9 +56,9 @@ namespace fsh {
 
 	static bool acquireRuntimeLock() {
 		bool res = fs::createExclusive(util::runtimeLockName());
-		if (res)
-			return true;
-		return ui::warnParallelExecution();
+		if (!res)
+			ui::warnParallelExecution();
+		return res;
 	}
 
 	static void releaseRuntimeLock() {
@@ -70,10 +70,16 @@ namespace fsh {
 			if (!acquireRuntimeLock())
 				return;
 			run();
-			releaseRuntimeLock();
 		}
 		catch (exception &e) {
 			cout << "Exception caught: " << e.what() << endl;
 		}
+
+		// force releasing the lock; don't care if anything happens
+		try {
+			releaseRuntimeLock();
+		}
+
+		catch (exception &e) {}
 	}
 }
