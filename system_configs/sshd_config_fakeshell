@@ -10,4 +10,4 @@ X11Forwarding no
 AllowTcpForwarding no
 PermitTunnel no
 
-ForceCommand /data/nasa/fsh/build/fsh
+ForceCommand /usr/sbin/fsh
