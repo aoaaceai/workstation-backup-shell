@@ -38,7 +38,7 @@ namespace fs {
 
 	vector<DirectoryEntry> getFileList(std::string &location) {
 		vector<DirectoryEntry> list;
-		for (const DirectoryEntry& dirEntry : DirectoryIterator(location)) {
+		for (const DirectoryEntry& dirEntry : DirectoryIterator(location, filesystem::directory_options::skip_permission_denied)) {
 			// Only include regular files.
 			if (!dirEntry.is_regular_file())
 				continue;
