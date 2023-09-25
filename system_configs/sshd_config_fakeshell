@@ -9,5 +9,6 @@ HostKey /etc/ssh/ssh_host_ed25519_key
 X11Forwarding no
 AllowTcpForwarding no
 PermitTunnel no
+UsePAM yes
 
 ForceCommand /usr/sbin/fsh
