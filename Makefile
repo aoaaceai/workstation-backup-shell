@@ -34,7 +34,9 @@ install:
 	mkdir -p $(RUNTIME_DIRS) $(READONLY_DIRS)
 	chmod 1777 $(RUNTIME_DIRS)
 	chmod 755 $(READONLY_DIRS)
-	mount -o bind /tmp2/backup_rootonly /tmp2_rootonly/
+	umount /tmp2_rootonly/ || true
+	umount /tmp2/backup_rootonly/ || true
+	mount -o bind /tmp2/backup_rootonly/ /tmp2_rootonly/
 
 uninstall:
 	rm /bin/fsh

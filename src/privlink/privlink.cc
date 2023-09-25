@@ -22,8 +22,9 @@ namespace privlink {
 			cout << "error 2";
 			throw errors::argumentError;
 		}
-		
-		fs::linkReadonly(targetPath);
+
+		string readonlyPath = util::outputReadonlyName(util::pathToFilename(targetPath));
+		fs::linkReadonly(targetPath, readonlyPath);
 	}
 
 	void start(int argc, char **argv) {

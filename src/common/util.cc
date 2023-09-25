@@ -50,7 +50,7 @@ namespace util {
 		return "/tmp2/backup_rootonly/";
 	}
 
-	string outputReadonlyName(const string &&filename) {
+	string outputReadonlyName(const string &filename) {
 		return outputReadonlyDir() + filename;
 	}
 
@@ -96,5 +96,9 @@ namespace util {
 		if (stat(path, &info) < 0)
 			return false;
 		return info.st_uid == getuid();
+	}
+
+	string pathToFilename(const string &path) {
+		return path.substr(path.find_last_of("/") + 1);
 	}
 }

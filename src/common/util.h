@@ -15,7 +15,8 @@ namespace util {
 	std::string outputArchiveDir();
 	std::string outputArchiveName(std::string &base, const std::string &&suffix);
 	std::string outputReadonlyDir();
-	std::string outputReadonlyName(const std::string &&filename);
+	std::string outputReadonlyName(const std::string &filename);
+	std::string pathToFilename(const std::string &path);
 	int fork_exec(std::vector<char *> &argv);
 	bool userOwns(const char *path);
 }

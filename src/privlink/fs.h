@@ -4,6 +4,6 @@
 #include <filesystem>
 
 namespace fs {
-	void linkReadonly(const std::filesystem::path &targetPath);
+	void linkReadonly(const std::filesystem::path &targetPath, const std::filesystem::path &readonlyPath);
 }
 #endif

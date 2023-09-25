@@ -5,12 +5,12 @@
 using namespace std;
 
 namespace fs {
-	void linkReadonly(const filesystem::path &targetPath) {
-		filesystem::create_hard_link(
-			targetPath,
-			util::outputReadonlyName(
-				targetPath.filename().c_str()
-			)
-		);
+	void linkReadonly(const filesystem::path &targetPath, const filesystem::path &readonlyPath) {
+		try {
+			filesystem::remove(readonlyPath);
+		}
+		catch (exception e) {}
+		filesystem::copy(targetPath, readonlyPath);
+		filesystem::remove(targetPath);
 	}
 }
