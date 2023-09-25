@@ -74,7 +74,5 @@ namespace fsh {
 		catch (exception &e) {
 			cout << "Exception caught: " << e.what() << endl;
 		}
-
-		catch (exception &e) {}
 	}
 }
