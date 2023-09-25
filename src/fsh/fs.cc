@@ -17,7 +17,7 @@ namespace fs {
 	using DirectoryIterator = std::filesystem::recursive_directory_iterator;
 
 	bool createExclusive(const string &path) {
-		int fd = open(path.c_str(), O_RDONLY | O_CREAT);
+		int fd = open(path.c_str(), O_RDONLY | O_CREAT, 0600);
 		if (fd < 0)
 			throw errors::openError;
 		return flock(fd, LOCK_EX | LOCK_NB) == 0;

@@ -75,11 +75,6 @@ namespace fsh {
 			cout << "Exception caught: " << e.what() << endl;
 		}
 
-		// force releasing the lock; don't care if anything happens
-		try {
-			releaseRuntimeLock();
-		}
-
 		catch (exception &e) {}
 	}
 }
