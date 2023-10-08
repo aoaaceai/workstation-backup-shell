@@ -1,5 +1,6 @@
 #include <filesystem>
 #include "../common/util.h"
+#include <unistd.h>
 #include "fs.h"
 
 using namespace std;
@@ -11,6 +12,7 @@ namespace fs {
 		}
 		catch (exception e) {}
 		filesystem::copy(targetPath, readonlyPath);
+		chown(readonlyPath.c_str(), getuid(), getgid());
 		filesystem::remove(targetPath);
 	}
 }

@@ -39,6 +39,6 @@ The sole purpose of this program is to bypass the [SFTP chroot restrictions](htt
 
 The solution is (not) quite straightforward.
 First, we create a directory (the Storage from now on) with permission 1777 in /tmp2/ to store the compressed files.
-Then, create another directory (the Archive from now on) with permission 755 in /tmp2/. Each time we create a new compressed file, make a hard link copy in the Archive.
+Then, create another directory (the Archive from now on) with permission 755 in /tmp2/. Each time we create a new compressed file, make a copy in the Archive.
 At this point it is not possible for SSHD to chroot into the Archive. Despite its permissions being 755, the parent directory /tmp2/ is still 1777.
 Thus, we bind mount the Acrhive to another directory (the Fake Root from now on) in "/". This way, sshd will assume that the Fake Root has 755 permission and is not writable. Users can then access the SFTP server and download the compressed data.
